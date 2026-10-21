@@ -1,3 +1,3 @@
-export function clearContainer(container) {
-  return (container.innerHTML = "");
+export function cleanContainer(container) {
+    container.innerHTML = "";
 }

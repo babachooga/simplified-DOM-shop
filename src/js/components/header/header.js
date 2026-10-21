@@ -1,5 +1,5 @@
 import { $app } from "../../../../index.js";
-import { clearContainer } from "../../DOM functions/index.js";
+import { cleanContainer } from "../../DOM functions/index.js";
 import { createProductsPage } from "../../pages/product_page/productPage.js";
 
 export function createHeader() {
@@ -18,7 +18,7 @@ export function createHeader() {
 
   const events = {
     products: () => {
-      clearContainer($app)
+      cleanContainer($app)
       const $productsPage = createProductsPage()
       $app.append($productsPage)
     },
