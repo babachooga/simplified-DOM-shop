@@ -29,25 +29,29 @@ export class Product {
   }
 }
 
+const actions = {
+  addIntoBasket: "addIntoBasket",
+};
+
 export function renderCard(product) {
-  const card = document.createElement("div");
-  card.className = "product-card";
+  const $card = document.createElement("div");
+  $card.className = "product-card";
 
-  const title = document.createElement("h3");
-  title.textContent = product.name;
+  const $title = document.createElement("h3");
+  $title.textContent = product.name;
 
-  const brand = document.createElement("p");
-  brand.textContent = product.brand;
+  const $brand = document.createElement("p");
+  $brand.textContent = product.brand;
 
-  const price = document.createElement("p");
-  price.textContent = `${product.getPrice()}`;
+  const $price = document.createElement("p");
+  $price.textContent = `${product.getPrice()}`;
 
-  const addButton = document.createElement("button");
-  addButton.textContent = "Добавить в корзину";
-  addButton.dataset.product_id = product.getId();
+  const $addButton = document.createElement("button");
+  $addButton.textContent = "Добавить в корзину";
+  $addButton.dataset.product_id = product.getId();
+  $addButton.dataset.action = actions.addIntoBasket;
 
-  card.append(title, brand, price, addButton);
+  $card.append($title, $brand, $price, $addButton);
 
-  return card;
+  return $card;
 }
-

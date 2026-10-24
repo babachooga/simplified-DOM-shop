@@ -1,6 +1,7 @@
 import { $app } from "../../../../index.js";
 import { cleanContainer } from "../../DOM functions/index.js";
 import { createProductsPage } from "../../pages/product_page/productPage.js";
+import { basketPage } from "../../pages/basket_page/basketPage.js";
 
 export function createHeader() {
   const $header = document.createElement("header");
@@ -23,7 +24,9 @@ export function createHeader() {
       $app.append($productsPage)
     },
     basket: () => {
-      console.log(2);
+      cleanContainer($app)
+      const $basketPage = basketPage()
+      $app.append($basketPage)
     },
   };
 

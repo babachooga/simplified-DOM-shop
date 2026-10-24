@@ -1,9 +1,12 @@
-import { database } from "../../database/database.js";
+const ACTIONS = {
+  moveToPage: "moveToPage"
+}
 
 export function createPaginationButton(number) {
   const $button = document.createElement("button");
   $button.textContent = number;
   $button.dataset.page_number = number;
+  $button.dataset.action = ACTIONS.moveToPage;
   $button.className = "page-button";
   return $button;
 }
@@ -50,7 +53,7 @@ export class Pagination {
     return Math.ceil(this.array.length / this.#PRODUCTS_PER_PAGE);
   }
   setCurrentPage(number) {
-    if (number <= 0 || typeof number !== "number") {
+    if (number <= 0 || typeof number !== "number" || number > this.pagesQuantity) {
       throw new Error("Invalid number");
     }
     this.currentPage = number;
@@ -71,7 +74,7 @@ export class Pagination {
       throw new Error("Type of value is't array");
     }
     this.array = newArray;
-  }
+  }//products.id products.name products.brand products.price categories.category
   resetPagination(array = []) {
     if (!Array.isArray(array)) {
       throw new Error("Invalid value, valid is't array");
