@@ -1,40 +1,41 @@
-import { $app } from "../../../../index.js";
-import { cleanContainer } from "../../DOM functions/index.js";
-import { createProductsPage } from "../../pages/product_page/productPage.js";
-import { basketPage } from "../../pages/basket_page/basketPage.js";
+export const HEADER_HANDLER = {
+  move_to_basket: {
+    key: "move_to_basket",
+    name: "basket",
+    text: "basket page",
+  },
+  move_to_products: {
+    key: "move_to_products",
+    name: "products",
+    text: "products page",
+  },
+  move_to_about: {
+    key: "move_to_about",
+    name: "about",
+    text: "about page",
+  },
+};
 
 export function createHeader() {
   const $header = document.createElement("header");
   $header.className = "header";
 
-  const $buttonProductPage = document.createElement("button");
-  $buttonProductPage.dataset.page = "products";
-  $buttonProductPage.textContent = "products";
+  const $nav = createHeaderNavigation();
 
-  const $buttonBasketPage = document.createElement("button");
-  $buttonBasketPage.dataset.page = "basket";
-  $buttonBasketPage.textContent = "basket";
+  $header.append($nav);
+  return $header;
+}
 
-  $header.append($buttonProductPage, $buttonBasketPage);
+function createHeaderNavigation() {
+  const $nav = document.createElement("nav");
 
-  const events = {
-    products: () => {
-      cleanContainer($app)
-      const $productsPage = createProductsPage()
-      $app.append($productsPage)
-    },
-    basket: () => {
-      cleanContainer($app)
-      const $basketPage = basketPage()
-      $app.append($basketPage)
-    },
-  };
+  Object.entries(HEADER_HANDLER).forEach(([key, { name, text }]) => {
+    const $button = document.createElement("button");
+    $button.dataset[key] = name;
+    $button.textContent = text;
 
-  $header.addEventListener("click", (event) => {
-    const target = event.target.closest(`[data-page]`);
-    const pageValue = target.dataset["page"];
-    events[pageValue]()
+    $nav.append($button);
   });
 
-  return $header;
+  return $nav;
 }

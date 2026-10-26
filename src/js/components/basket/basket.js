@@ -1,19 +1,17 @@
-import { Product } from "../product/product.js";
-
 export class Basket {
   #basket = [];
   get basket() {
     return [...this.#basket];
   }
-  get fullPrice(){
-    return this.#basket.reduce((acc,{product,amount})=>{
-      const finalPrice = product.getPrice() * amount
-      return acc += finalPrice
-    },0)
+  get fullPrice() {
+    return this.#basket.reduce((acc, { product, amount }) => {
+      const finalPrice = product.getPrice() * amount;
+      return (acc += finalPrice);
+    }, 0);
   }
   addProduct(product) {
     const productId = product.getId();
-    const productInBasket = findProductInBasket(this.#basket, productId);
+    const productInBasket = this.findProduct(productId);
 
     if (productInBasket) {
       this.#basket = this.#basket.map(({ product, amount }) => {
@@ -31,7 +29,7 @@ export class Basket {
   removeProduct(product) {
     const productId = product.getId();
 
-    const cartProduct = findProductInBasket(this.#basket, productId);
+    const cartProduct = this.findProduct(productId);
 
     if (!cartProduct) {
       throw new Error("No such product in the basket");
@@ -53,8 +51,7 @@ export class Basket {
   deleteProduct(product) {
     const productId = product.getId();
 
-    console.log()
-    if (!findProductInBasket(this.#basket, productId)) {
+    if (!this.findProduct(productId)) {
       throw new Error("No such product in the basket");
     }
 
@@ -64,19 +61,20 @@ export class Basket {
 
     return this.basket;
   }
+  findProduct(id) {
+    return this.#basket.find(
+      ({ product, amount }) => product.getId() == id,
+    );
+  }
 }
 
-function findProductInBasket(basket, id) {
-  return basket.find(
-    ({ product, amount } = productInfo) => product.getId() == id,
-  );
-}
+export const BASKET_HANDLER = {
+  decrease: "decrease",
+  increase: "increase",
+  delete: "delete",
+};
 
-const ACTIONS = {
-  DECREASE: "decrease",
-  INCREASE: "increase",
-  DELETE: "delete",
-}
+export const PRODUCT_ID = "product_id";
 
 export function createCartItemCard({ product, amount }) {
   const $item = document.createElement("div");
@@ -94,8 +92,7 @@ export function createCartItemCard({ product, amount }) {
   const $decrease = document.createElement("button");
   $decrease.type = "button";
   $decrease.className = "cart-item__button";
-  $decrease.dataset.action = ACTIONS.DECREASE;
-  $decrease.dataset.product_id = product.getId();
+  $decrease.dataset[BASKET_HANDLER.decrease] = BASKET_HANDLER.decrease;
   $decrease.textContent = "−";
 
   const $amount = document.createElement("span");
@@ -105,8 +102,7 @@ export function createCartItemCard({ product, amount }) {
   const $increase = document.createElement("button");
   $increase.type = "button";
   $increase.className = "cart-item__button";
-  $increase.dataset.action = ACTIONS.INCREASE;
-  $increase.dataset.product_id = product.getId();
+  $increase.dataset[BASKET_HANDLER.increase] = BASKET_HANDLER.increase;
   $increase.textContent = "+";
 
   const $controls = document.createElement("nav");
@@ -116,8 +112,7 @@ export function createCartItemCard({ product, amount }) {
   const $delete = document.createElement("button");
   $delete.type = "button";
   $delete.className = "cart-item__delete";
-  $delete.dataset.action = ACTIONS.DELETE;
-  $delete.dataset.product_id = product.getId();
+  $delete.dataset[BASKET_HANDLER.delete] = BASKET_HANDLER.delete;
   $delete.textContent = "Удалить";
 
   $item.append($name, $price, $controls, $delete);

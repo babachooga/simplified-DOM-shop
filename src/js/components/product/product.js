@@ -7,7 +7,7 @@ export class Product {
   #id;
   #price;
   constructor(product) {
-    if (!product.id) {
+    if (typeof product.id !== "number" || isNaN(product.id)) {
       throw idError;
     }
     if (product.price <= 0) {
@@ -29,12 +29,16 @@ export class Product {
   }
 }
 
-const actions = {
-  addIntoBasket: "addIntoBasket",
-};
+export const PRODUCT_HANDLER = {
+  favorite: "favotite",
+  add_to_cart: "add_to_cart"
+}
+
+export const PRODUCT_ID = "product_id"
 
 export function renderCard(product) {
   const $card = document.createElement("div");
+  $card.dataset[PRODUCT_ID] = product.getId();
   $card.className = "product-card";
 
   const $title = document.createElement("h3");
@@ -47,11 +51,14 @@ export function renderCard(product) {
   $price.textContent = `${product.getPrice()}`;
 
   const $addButton = document.createElement("button");
-  $addButton.textContent = "Добавить в корзину";
-  $addButton.dataset.product_id = product.getId();
-  $addButton.dataset.action = actions.addIntoBasket;
+  $addButton.textContent = "add to card"
+  $addButton.dataset[PRODUCT_HANDLER.add_to_cart] = PRODUCT_HANDLER.add_to_cart;
+  
+  const $favoriteButton = document.createElement("button");
+  $favoriteButton.textContent = "to favorite"
+  $favoriteButton.dataset[PRODUCT_HANDLER.favorite] = PRODUCT_HANDLER.favorite;
 
-  $card.append($title, $brand, $price, $addButton);
+  $card.append($title, $brand, $price, $addButton, $favoriteButton);
 
   return $card;
 }

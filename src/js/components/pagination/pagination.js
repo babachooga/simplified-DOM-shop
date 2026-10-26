@@ -1,12 +1,14 @@
-const ACTIONS = {
-  moveToPage: "moveToPage"
+
+export const PAG_BUTTON_HANDLER = {
+  page_number: "page_number",
+  next_page: "next_page",
 }
 
 export function createPaginationButton(number) {
   const $button = document.createElement("button");
   $button.textContent = number;
-  $button.dataset.page_number = number;
-  $button.dataset.action = ACTIONS.moveToPage;
+  $button.dataset[PAG_BUTTON_HANDLER.page_number] = number;
+  $button.dataset[PAG_BUTTON_HANDLER.next_page] = PAG_BUTTON_HANDLER.next_page;
   $button.className = "page-button";
   return $button;
 }
@@ -74,16 +76,5 @@ export class Pagination {
       throw new Error("Type of value is't array");
     }
     this.array = newArray;
-  }//products.id products.name products.brand products.price categories.category
-  resetPagination(array = []) {
-    if (!Array.isArray(array)) {
-      throw new Error("Invalid value, valid is't array");
-    }
-    this.#STARTING_ARRAY = [];
-    this.#STARTING_PAGE = 1;
-    this.#PRODUCTS_PER_PAGE = 10;
-    this.#BUTTONS_QUANTITY_LIMIT = 5;
-    this.array = array;
-    this.currentPage = 1;
   }
 }
